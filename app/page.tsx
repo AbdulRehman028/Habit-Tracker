@@ -51,7 +51,7 @@ export default function Home() {
                 Create account
               </Link>
               <Link
-                href="/dashboard"
+                href="/habit-tracker"
                 className="rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-bold uppercase tracking-wide text-slate-900 transition hover:-translate-y-0.5 hover:border-slate-900"
               >
                 Open dashboard

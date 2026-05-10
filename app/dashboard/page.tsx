@@ -36,7 +36,8 @@ export default function DashboardPage() {
 
   // Calculate completion stats for today
   const todayStats = useMemo(() => {
-    if (!snapshot?.habits || !snapshot.trackerMarks) return { completed: 0, total: 0, percentage: 0 };
+    if (!snapshot?.habits || !snapshot.trackerMarks)
+      return { completed: 0, total: 0, percentage: 0 };
 
     let completed = 0;
     let total = 0;
@@ -46,7 +47,11 @@ export default function DashboardPage() {
       const target = snapshot.habitTargets?.[habitIdx] || 1;
       const dayOfWeek = new Date().getDay();
       const daysInWeek = [0, 1, 2, 3, 4, 5, 6];
-      const isTrackingToday = target > 0 && daysInWeek.slice(0, target).includes(dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+      const isTrackingToday =
+        target > 0 &&
+        daysInWeek
+          .slice(0, target)
+          .includes(dayOfWeek === 0 ? 6 : dayOfWeek - 1);
 
       if (isTrackingToday) {
         total += 1;
@@ -57,7 +62,11 @@ export default function DashboardPage() {
       }
     });
 
-    return { completed, total, percentage: total > 0 ? Math.round((completed / total) * 100) : 0 };
+    return {
+      completed,
+      total,
+      percentage: total > 0 ? Math.round((completed / total) * 100) : 0,
+    };
   }, [snapshot, todayColIndex]);
 
   // Get today's habits list
@@ -71,12 +80,18 @@ export default function DashboardPage() {
         const target = snapshot.habitTargets?.[habitIdx] || 1;
         const dayOfWeek = new Date().getDay();
         const daysInWeek = [0, 1, 2, 3, 4, 5, 6];
-        const isTrackingToday = target > 0 && daysInWeek.slice(0, target).includes(dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+        const isTrackingToday =
+          target > 0 &&
+          daysInWeek
+            .slice(0, target)
+            .includes(dayOfWeek === 0 ? 6 : dayOfWeek - 1);
 
         if (!isTrackingToday) return null;
 
         const mark = snapshot.trackerMarks?.[habitIdx]?.[todayColIndex];
-        const streak = computeHabitStreakSummary(snapshot.trackerMarks[habitIdx] || []);
+        const streak = computeHabitStreakSummary(
+          snapshot.trackerMarks[habitIdx] || [],
+        );
         const category = snapshot.habitCategories?.[habitIdx] || "General";
 
         return {
@@ -99,7 +114,9 @@ export default function DashboardPage() {
   }, [snapshot, todayColIndex]);
 
   const handleToggleHabit = (habitIdx: number) => {
-    dispatch(toggleTrackerCell({ rowIndex: habitIdx, dayIndex: todayColIndex }));
+    dispatch(
+      toggleTrackerCell({ rowIndex: habitIdx, dayIndex: todayColIndex }),
+    );
   };
 
   useEffect(() => {
@@ -116,7 +133,7 @@ export default function DashboardPage() {
           enqueueToast({
             tone: "error",
             message: "Could not verify your session. Please log in again.",
-          })
+          }),
         );
       }
 
@@ -128,7 +145,11 @@ export default function DashboardPage() {
       }
 
       const metadataName = session.user.user_metadata?.full_name;
-      setUserName(typeof metadataName === "string" && metadataName.trim() ? metadataName.trim() : null);
+      setUserName(
+        typeof metadataName === "string" && metadataName.trim()
+          ? metadataName.trim()
+          : null,
+      );
       setUserEmail(session.user.email || null);
       setIsCheckingSession(false);
     };
@@ -153,7 +174,8 @@ export default function DashboardPage() {
     return (
       <main className="grid min-h-screen place-items-center bg-slate-100 px-4 py-6 text-slate-950">
         <p className="max-w-xl text-center font-semibold">
-          Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your .env, then restart the app.
+          Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your
+          .env, then restart the app.
         </p>
       </main>
     );
@@ -172,18 +194,39 @@ export default function DashboardPage() {
       <section className="mx-auto max-w-4xl space-y-6">
         {/* Header with date and greeting */}
         <header className="rounded-4xl border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-600">Today</p>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-600">
+            Today
+          </p>
           <p className="mt-2 text-sm text-slate-600">{todayDateStr}</p>
           <h1 className="mt-3 font-brand-display text-4xl leading-none tracking-tight text-slate-900">
-            {userName || (userEmail ? userEmail.split("@")[0] : "there")}, let&apos;s check in.
+            {userName || (userEmail ? userEmail.split("@")[0] : "there")},
+            let&apos;s check in.
           </h1>
         </header>
+
+        {/* Header Section */}
+        <div className="space-y-4 rounded-4xl border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+          <div>
+            <p className="inline-flex rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-amber-800">
+              Habit Tracker
+            </p>
+            <h1 className="mt-4 font-brand-display text-4xl leading-none tracking-tight text-slate-900 sm:text-5xl">
+              Build Your Tracking Window
+            </h1>
+            <p className="mt-3 text-slate-600">
+              Add habits, choose a custom date range, and mark daily status in
+              one focused table.
+            </p>
+          </div>
+        </div>
 
         {/* Daily completion progress */}
         <div className="rounded-4xl border border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Today&apos;s Progress</p>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
+                Today&apos;s Progress
+              </p>
               <p className="mt-2 font-brand-display text-3xl text-slate-900">
                 {todayStats.completed}/{todayStats.total}
               </p>
@@ -193,7 +236,14 @@ export default function DashboardPage() {
             <div className="relative h-24 w-24">
               <svg className="h-full w-full" viewBox="0 0 100 100">
                 {/* Background circle */}
-                <circle cx="50" cy="50" r="45" fill="none" stroke="#e2e8f0" strokeWidth="8" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  fill="none"
+                  stroke="#e2e8f0"
+                  strokeWidth="8"
+                />
                 {/* Progress circle */}
                 <circle
                   cx="50"
@@ -208,7 +258,9 @@ export default function DashboardPage() {
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <p className="font-bold text-slate-900">{todayStats.percentage}%</p>
+                <p className="font-bold text-slate-900">
+                  {todayStats.percentage}%
+                </p>
               </div>
             </div>
           </div>
@@ -216,7 +268,8 @@ export default function DashboardPage() {
           {todayStats.total === 0 && (
             <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <p className="text-sm text-slate-600">
-                No habits scheduled for today. Check your targets in the full tracker.
+                No habits scheduled for today. Check your targets in the full
+                tracker.
               </p>
             </div>
           )}
@@ -225,7 +278,9 @@ export default function DashboardPage() {
         {/* Today's habits list */}
         {todayHabits.length > 0 && (
           <section className="space-y-3">
-            <h2 className="px-2 font-brand-display text-2xl text-slate-900">Your habits today</h2>
+            <h2 className="px-2 font-brand-display text-2xl text-slate-900">
+              Your habits today
+            </h2>
 
             {todayHabits.map((habit) => (
               <article
@@ -265,9 +320,7 @@ export default function DashboardPage() {
             ))}
           </section>
         )}
-
       </section>
     </AppShell>
   );
 }
-

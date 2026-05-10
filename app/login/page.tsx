@@ -22,7 +22,7 @@ export default function LoginPage() {
     const checkSession = async () => {
       const { data } = await supabaseBrowser.auth.getSession();
       if (active && data.session) {
-        router.replace("/dashboard");
+        router.replace("/habit-tracker");
       }
     };
 
@@ -67,7 +67,7 @@ export default function LoginPage() {
       }
 
       dispatch(enqueueToast({ tone: "success", message: "Welcome back. Signed in successfully." }));
-      router.replace("/dashboard");
+      router.replace("/habit-tracker");
       router.refresh();
     } finally {
       setIsSubmitting(false);

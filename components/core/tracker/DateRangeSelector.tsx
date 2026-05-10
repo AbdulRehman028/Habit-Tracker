@@ -21,8 +21,8 @@ export default function DateRangeSelector({
 }: DateRangeSelectorProps) {
   const rangeOptions: Array<{ label: string; value: DateRange; days: number }> = useMemo(
     () => [
-      { label: "Last 7 Days", value: "7", days: 7 },
       { label: "Last 30 Days", value: "30", days: 30 },
+      { label: "Last 7 Days", value: "7", days: 7 },
       { label: "Full Month (31)", value: "31", days: 31 },
       { label: "Custom Range", value: "custom", days: 0 },
     ],

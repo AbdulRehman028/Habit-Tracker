@@ -25,7 +25,7 @@ export default function SignupPage() {
     const checkSession = async () => {
       const { data } = await supabaseBrowser.auth.getSession();
       if (active && data.session) {
-        router.replace("/dashboard");
+        router.replace("/habit-tracker");
       }
     };
 
@@ -96,7 +96,7 @@ export default function SignupPage() {
 
       if (data.session) {
         dispatch(enqueueToast({ tone: "success", message: "Account created. You are now signed in." }));
-        router.replace("/onboarding");
+        router.replace("/habit-tracker");
         router.refresh();
         return;
       }
